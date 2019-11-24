@@ -29,7 +29,7 @@ class WPSL{
 private:
     double getArea(size_t label);
     Index randomIndex(const Index &ll, const Index &ur);
-    size_t chooseIndexPreferentially();
+
     size_t chooseIndexRandomly();
 public:
     WPSL();
@@ -53,6 +53,8 @@ public:
     void viewIndex();
     void addPoint();
     void totalArea();
+
+    size_t chooseIndexPreferentially(); // to be declared private
 };
 
 
@@ -142,8 +144,28 @@ Index WPSL::randomIndex(const Index &ll, const Index &ur) {
  * @return
  */
 size_t WPSL::chooseIndexPreferentially() {
-    cout << "TO be implemented" << endl;
-    return 0;
+    std::discrete_distribution<size_t> dist(_area.begin(), _area.end());
+
+    cout << "{";
+    for(auto a: dist.probabilities()){
+        cout << a << ", ";
+    }
+    cout << "}" << endl << "{";
+    vector<size_t> frequency(_area.size());
+    size_t limit  = 10000;
+    for(size_t i{}; i < limit; ++i) {
+        auto r = dist(random_engine);
+        cout << r << ",";
+        ++frequency[r];
+    }
+    cout << "}" << endl << "frequency {" << endl;
+    for(size_t i{}; i < frequency.size(); ++i) {
+        cout << frequency[i] << ",";
+        cout << frequency[i] / double(limit) << endl;
+    }
+    cout << "}" << endl;
+
+    return dist(random_engine);
 }
 
 void WPSL::totalArea() {
@@ -169,6 +191,8 @@ void test_class(){
     wpsl.addPoint();
     wpsl.viewIndex();
     wpsl.totalArea();
+
+    wpsl.chooseIndexPreferentially();
 }
 
 int main(int argc, char* argv[]) {
