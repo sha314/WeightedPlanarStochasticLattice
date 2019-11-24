@@ -1,0 +1,51 @@
+The construction process of the WPSL can be described as follows.
+It starts with a square of unit area which we regard as an initiator.
+The generator then divides the initiator, in the first step,
+randomly with uniform probability into four smaller blocks.
+In the second step and thereafter, the generator is applied to only one of the blocks.
+The question is: How do we pick that block when there is more than one block?
+The most generic choice would be to pick preferentially according to their areas so that
+the higher the area the higher the probability to be picked. For instance, in step one,
+the generator divides the initiator randomly into four smaller blocks.
+Let us label their areas starting from the top left corner and moving
+clockwise as a_1 , a_2 , a_3  and a_4 . But of course the way we label is totally arbitrary
+and will bear no consequence to the final results of any observable quantities.
+Note that a_i is the area of the  i-th block  which can be well regarded as the probability
+of picking the i-th block.   These probabilities are naturally  normalized
+         sum_i a_i = 1
+since we choose the area of the initiator equal to one.
+In step two, we pick one of the four blocks preferentially with respect to their areas.
+Consider that we pick the block 3 and apply the generator onto  it to divide it randomly
+into four smaller blocks. Thus the label 3 is now redundant and hence we recycle it to label
+the top left corner while the rest of three  new blocks are labelled a_5 , a_6 and a_7
+in a clockwise fashion.   In general, in the j-th step,  we pick one out of
+        (3*j − 2)
+blocks preferentially with respect to area and divide randomly into four blocks.
+The detailed algorithm can be found in Dayeen and Hassan[1] and Hassan, Hassan, and Pavel.[2]
+
+
+
+This process of lattice generation can also be described as follows.
+Consider that the substrate is a square of unit area and at each
+time step a seed is nucleated from which two orthogonal partitioning
+lines parallel to the sides of the substrate are grown until intercepted by existing lines.
+It results in partitioning the square into ever smaller mutually exclusive rectangular blocks.
+Note that the higher the area of a block, the higher is the probability
+that the seed will be nucleated in it to divide that into four smaller blocks
+since seeds are sown at random on the substrate.
+It can also describes kinetics of fragmentation of two-dimensional objects.
+
+
+
+paper
+1. Hassan, M K; Hassan, M Z; Pavel, N I (2010-09-27).
+ "Scale-free network topology and multifractality in a weighted planar stochastic lattice".
+  New Journal of Physics.
+  IOP Publishing.  12 (9): 093045. doi:10.1088/1367-2630/12/9/093045.
+   ISSN 1367-2630.
+
+2. Hassan, M K; Hassan, M Z; Pavel, N I (2011-05-01).
+"Scale-free coordination number disorder and multifractal size disorder in weighted planar stochastic lattice".
+ Journal of Physics: Conference Series.
+  IOP Publishing. 297: 012010. arXiv:1104.1831. doi:10.1088/1742-6596/297/1/012010.
+   ISSN 1742-6596.
