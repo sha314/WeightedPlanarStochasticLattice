@@ -11,18 +11,26 @@ public:
     friend std::ostream& operator<<(ostream& os, const Index& index){
         return os << "(" << index.x_ << "," << index.y_ << ")";
     }
+    double getX() const {return x_;}
+    double getY() const {return y_;}
 };
 
 class WPSL{
     std::vector<Index> index_lower_left;
     std::vector<Index> index_upper_right;
     std::vector<unsigned> _label;
+    std::vector<double > _area;
 //    const string symbol = " _< ^> ";
     const string symbol = " to ";
 
     std::mt19937 random_engine; // Mersenne Twister 19937 generator (class )
 //    std::mt19937_64 random_engine_64; // Mersene Twister 19937 generator (64 bit) (class )
     size_t random_state{};
+private:
+    double getArea(size_t label);
+    Index randomIndex(const Index &ll, const Index &ur);
+    size_t chooseIndexPreferentially();
+    size_t chooseIndexRandomly();
 public:
     WPSL();
     ~WPSL() = default;
@@ -41,8 +49,10 @@ public:
         }
         random_engine.seed(random_state);
     }
+
     void viewIndex();
     void addPoint();
+    void totalArea();
 };
 
 
@@ -50,15 +60,18 @@ WPSL::WPSL() {
     index_lower_left.emplace_back(Index(0, 0));
     index_upper_right.emplace_back(Index(1, 1));
     _label.emplace_back(0);
+    _area.emplace_back(getArea(0));
 }
 
 void WPSL::viewIndex() {
     cout << _label.size() << " elements" << endl;
-    cout << "[label] => {(lower left)" << symbol << "(upper right)}" << endl;
+    cout << "[label] => {(lower left)" << symbol << "(upper right)}, A=$Area" << endl;
     for(size_t i{}; i < _label.size(); ++i){
         cout << "[" << _label[i] << "] => " << "{"
              << index_lower_left[i] << symbol
-             << index_upper_right[i] << "}" << endl;
+             << index_upper_right[i] << "}  A="
+             << _area[i]
+             << endl;
     }
 }
 
@@ -67,16 +80,95 @@ void WPSL::viewIndex() {
  */
 void WPSL::addPoint() {
     // randomly select a box and divide it into four parts
-    size_t r = random_engine() % _label.size();
-    size_t i = _label[i];
+    size_t r = chooseIndexRandomly();
+//    size_t r = chooseIndexPreferentially();
 
+    size_t i = _label[r];
+    Index ll = index_lower_left[i];
+    Index ur = index_upper_right[i];
 
-    // todo preferentially select a box and divide it into four parts
+    auto n = randomIndex(ll, ur); // randomly selected new index in the box bounded by ll and ur
+
+    // index is reused for new lower left box
+    index_lower_left[i] = ll; // reuse space
+    index_upper_right[i] = n; // reuse space
+    _area[i] = getArea(i);
+
+    // lower right
+    index_lower_left.emplace_back(Index(n.getX(), ll.getY()));
+    index_upper_right.emplace_back(Index(ur.getX(), n.getY()));
+    _area.emplace_back(getArea(_label.size()));
+    _label.emplace_back(_label.size());
+
+    // upper right
+    index_lower_left.emplace_back(n);
+    index_upper_right.emplace_back(ur);
+    _area.emplace_back(getArea(_label.size()));
+    _label.emplace_back(_label.size());
+
+    // upper left
+    index_lower_left.emplace_back(Index(ll.getX(), n.getY()));
+    index_upper_right.emplace_back(Index(n.getX(), ur.getY()));
+    _area.emplace_back(getArea(_label.size()));
+    _label.emplace_back(_label.size());
+
+}
+
+double WPSL::getArea(size_t label) {
+    Index ll = index_lower_left[label];
+    Index ur = index_upper_right[label];
+    double a = ll.getX() - ur.getX();
+    double b = ll.getY() - ur.getY();
+    return abs(a*b);
+}
+
+// give
+/**
+ * give a random Index inside a rectangle bounded by `ll` and `ur`
+ * @param ll  : lower left index
+ * @param ur  : upper right index
+ * @return    : random Index inside a rectangle bounded by `ll` and `ur`
+ */
+Index WPSL::randomIndex(const Index &ll, const Index &ur) {
+    uniform_real_distribution<double> dist1(ll.getX(), ur.getX());
+    uniform_real_distribution<double> dist2(ll.getY(), ur.getY());
+    double new_x = dist1(random_engine);
+    double new_y = dist2(random_engine);
+    return {new_x, new_y};
+}
+
+/**
+ * preferentially select a box according to their area to divide it into four parts
+ * @return
+ */
+size_t WPSL::chooseIndexPreferentially() {
+    cout << "TO be implemented" << endl;
+    return 0;
+}
+
+void WPSL::totalArea() {
+    double total{};
+    for(auto a: _area){
+        total += a;
+    }
+    cout << "total area A= " << total << endl;
+}
+
+size_t WPSL::chooseIndexRandomly() {
+    return random_engine() % _label.size();
 }
 
 void test_class(){
     WPSL wpsl;
     wpsl.viewIndex();
+
+    wpsl.addPoint();
+    wpsl.viewIndex();
+    wpsl.totalArea();
+
+    wpsl.addPoint();
+    wpsl.viewIndex();
+    wpsl.totalArea();
 }
 
 int main(int argc, char* argv[]) {
