@@ -51,5 +51,5 @@ double moments(std::vector<std::vector<double> > x_lim, std::vector<std::vector<
 //this function is for testing purpose
 //delete it if you plan to use it as module
 int main_jitu();
-
+void main_jitu_test();
 #endif //WEIGHTEDPLANARSTOCHASTICLATTICE_WPSL_H

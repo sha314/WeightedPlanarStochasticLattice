@@ -7,6 +7,6 @@ set(SOURCE_FILES
         src/main.cpp
         src/wpsl.cpp
         src/wpsl.h
-        )
+        src/view.cpp src/view.h)
 
 add_executable(wpsl ${SOURCE_FILES})

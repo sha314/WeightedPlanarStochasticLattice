@@ -6,6 +6,7 @@
  * Zahidul Islam Jitu vai
  */
 #include "wpsl.h"
+#include "view.h"
 
 
 using namespace std;
@@ -100,7 +101,12 @@ bool is_neighbor(vector<vector<double> > x_lim, vector<vector<double> > y_lim, i
     return result;
 }
 
-void generate_new_site(vector<vector<int> > &neighbor, vector<vector<double> > &x_lim, vector<vector<double> > &y_lim, int site, double x_new, double y_new) {
+void generate_new_site(
+        vector<vector<int> > &neighbor,
+        vector<vector<double> > &x_lim,
+        vector<vector<double> > &y_lim,
+        int site, double x_new, double y_new)
+{
     vector<int> temp_neighbor_list;
     vector<int> empty;
     vector<double> empty_double;
@@ -335,4 +341,118 @@ int main_jitu() {
         cout << endl;
     }
     */
+    return 0;
+}
+
+
+//this function is for testing purpose
+//delete it if you plan to use it as module
+void main_jitu_test() {
+
+
+    string filename1 = "res/x_cube-vs-t.data";
+    ofstream write1(filename1.c_str());
+
+    string filename2 = "res/moments_n_3-vs-t.data";
+    ofstream write2(filename2.c_str());
+
+    string filename3 = "res/moments_n_4-vs-t.data";
+    ofstream write3(filename3.c_str());
+
+    string filename4 = "res/moments_n_5-vs-t.data";
+    ofstream write4(filename4.c_str());
+
+    vector<vector<int> > neighbor;
+    vector<vector<double>> x_lim;
+    vector<vector<double>> y_lim;
+    //test_neighbor_init(neighbor);
+    vector<int> empty;
+    vector<double> empty_double;
+
+    neighbor.push_back(empty);
+    neighbor[0].push_back(0);
+
+    x_lim.push_back(empty_double);
+    x_lim[0].push_back(0.0);
+    x_lim[0].push_back(1.0);
+
+    y_lim.push_back(empty_double);
+    y_lim[0].push_back(0.0);
+    y_lim[0].push_back(1.0);
+
+    cout << "neighbor" << endl;
+    print(neighbor);
+    cout << "x_lim" << endl;
+    print(x_lim);
+    cout << "y_lim" << endl;
+    print(y_lim);
+    print_coordinate(x_lim, y_lim);
+
+    /*
+    double x_new = 0.6;
+    double y_new = 0.45;
+
+
+    generate_new_site(neighbor, x_lim, y_lim, 0, x_new, y_new);
+    cout << "******new*******" << endl;
+    cout << "(0.3,0.37) is in the site: " << find_site(x_lim, y_lim, 0.3, 0.37) << endl;
+    generate_new_site(neighbor, x_lim, y_lim, 0, 0.3, 0.37);
+    cout << "******new*******" << endl;
+    cout << "(0.8,0.1) is in the site: " << find_site(x_lim, y_lim, 0.8, 0.1) << endl;
+    generate_new_site(neighbor, x_lim, y_lim, 1, 0.8, 0.1);
+
+    cout << "(0.8,0.1) is in the site: " << find_site(x_lim, y_lim, 0.8, 0.1) << endl;
+
+    */
+
+    double x_new, y_new;
+    int site;
+    double length_cube = 0.0;
+    double moment_3 = 0.0;
+    double moment_4 = 0.0;
+    double moment_5 = 0.0;
+    int no_site = 0;
+    int limit = 10;
+    for (int t = 1; t < limit; t++) {
+        cout << "**********  t = " << t << endl;
+        x_new = my_rand();
+        y_new = my_rand();
+        site = find_site(x_lim, y_lim, x_new, y_new);
+        if (site != -1) {
+            generate_new_site(neighbor, x_lim, y_lim, site, x_new, y_new);
+            cout << "neighbor" << endl;
+            print(neighbor);
+            cout << "x_lim" << endl;
+            print(x_lim);
+            cout << "y_lim" << endl;
+            print(y_lim);
+            print_coordinate(x_lim, y_lim);
+
+//            if (t % 50 == 0 && t>1000) {
+//                no_site = 3 * t + 1;
+//                length_cube = x_cube(x_lim);
+//                moment_3 = moments(x_lim, y_lim, 3.0);
+//                moment_4 = moments(x_lim, y_lim, 4.0);
+//                moment_5 = moments(x_lim, y_lim, 5.0);
+//
+//                // writing at each iteration makes program run very slower // by shahnoor
+//                cout << no_site << "  " << length_cube << endl;
+//                cout << no_site << "  " << moment_3 << endl;
+//                cout << no_site << "  " << moment_4 << endl;
+//                cout << no_site << "  " << moment_5 << endl;
+//            }
+        }
+        cout << "generated series: " << t << endl;
+    }
+
+    /*
+    for (int i = 0; i < neighbor.size(); i++) {
+        cout << "neighbor of " << i << " is: ";
+        for (int j = 0; j < neighbor[i].size(); j++) {
+            cout << neighbor[i][j] << "   ";
+        }
+        cout << endl;
+    }
+    */
+
 }
