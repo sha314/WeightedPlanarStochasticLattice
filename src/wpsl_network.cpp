@@ -141,3 +141,14 @@ void WPSL_Network::viewAdjacencyList() {
         cout << "}" << endl;
     }
 }
+
+/**
+ * Find if `node_a` and `node_b` are neighbor of each other using their coordinate and ranges
+ * @param node_a
+ * @param node_b
+ * @return
+ */
+bool WPSL_Network::is_neighbor(int node_a, int node_b) {
+
+    return false;
+}

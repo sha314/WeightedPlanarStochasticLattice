@@ -31,6 +31,7 @@ public:
     void addNeighbor(const Index &ll, const Index &ur);
 
     void addLink(int a, int b);
+    bool is_neighbor(int node_a, int node_b);
 };
 
 #endif //WEIGHTEDPLANARSTOCHASTICLATTICE_WPSL_NETWORK_H
