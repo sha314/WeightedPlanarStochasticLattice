@@ -24,13 +24,13 @@ class WPSL{
 //    std::mt19937_64 random_engine_64; // Mersene Twister 19937 generator (64 bit) (class )
     size_t random_state{};
 private:
-    double getArea(size_t label);
-    Index randomIndex(const Index &ll, const Index &ur);
 
-    size_t chooseIndexRandomly();
+
+
 
     void add_point_v1();
     void add_point_v2();
+
 public:
     WPSL();
 
@@ -41,6 +41,7 @@ public:
         index_upper_right.clear();
         _node_label.clear();
         _area.clear();
+        init();
     }
 
     void setRandomState(size_t rs, bool a){
@@ -56,8 +57,28 @@ public:
     void addPoint();
     void totalArea();
 
-    size_t chooseIndexPreferentially(); // to be declared private
-    void addNeighbor(const Index &ll, const Index &ur);
+
+    virtual void addNeighbor(const Index &ll, const Index &ur);
+
+    virtual void init();
+
+    unsigned getNode(unsigned i) const {return _node_label[i];}
+    Index getUpperRight(unsigned label) const {return index_upper_right[label];}
+    Index getLowerLeft(unsigned label) const {return index_lower_left[label];}
+    void setUpperRight(unsigned label, Index in) {index_upper_right[label] = in;}
+    void setLowerLeft(unsigned label, Index in)  {index_upper_right[label] = in;}
+
+    void addUpperRight(Index in) {index_upper_right.emplace_back(in);}
+    void addLowerLeft(Index in)  {index_upper_right.emplace_back(in);}
+
+    size_t chooseIndexRandomly();
+    size_t chooseIndexPreferentially();
+    double getArea(size_t label);
+    void setArea(size_t label, double A)  {_area[label] = A;}
+    void addArea(double A){_area.emplace_back(A);}
+    Index randomIndex(const Index &ll, const Index &ur);
+    size_t nodeCount() const {return _node_label.size();}
+    void addNodeLabel(){_node_label.emplace_back(_node_label.size());}
 };
 
 #endif //WEIGHTEDPLANARSTOCHASTICLATTICE_WPSL_H

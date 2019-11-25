@@ -9,6 +9,10 @@ using namespace std;
 
 
 WPSL::WPSL() {
+    init();
+}
+
+void WPSL::init() {
     index_lower_left.emplace_back(Index(0, 0));
     index_upper_right.emplace_back(Index(1, 1));
     _node_label.emplace_back(0);
@@ -16,6 +20,7 @@ WPSL::WPSL() {
 }
 
 void WPSL::viewIndex() {
+    cout << "WPSL::viewIndex" << endl;
     cout << _node_label.size() << " elements" << endl;
     cout << "[label] => {(lower left)" << symbol << "(upper right)}, A=$Area" << endl;
     for(size_t i{}; i < _node_label.size(); ++i){

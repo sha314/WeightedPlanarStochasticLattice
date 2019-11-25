@@ -1,6 +1,7 @@
 #include <iostream>
 #include "jitu-vai/wpsl-jitu.h"
 #include "wpsl.h"
+#include "wpsl_network.h"
 #include <random>
 
 using namespace std;
@@ -8,7 +9,13 @@ using namespace std;
 
 
 
+void test_wpsl_network(){
+    WPSL_Network wpslNetwork;
 
+    wpslNetwork.viewIndex();
+    wpslNetwork.viewLinks();
+    wpslNetwork.addNode();
+}
 
 void test_class(){
     WPSL wpsl;
@@ -33,7 +40,8 @@ int main(int argc, char* argv[]) {
 
 //    main_jitu_test();
 
-    test_class();
+//    test_class();
+    test_wpsl_network();
 
 
     return 0;

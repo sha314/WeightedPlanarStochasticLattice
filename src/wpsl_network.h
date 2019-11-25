@@ -22,6 +22,13 @@ public:
 
     void addNode();
 
+    void viewLinks();
+    void init() override;
+
+    void first_4_node();
+    void addNeighbor(const Index &ll, const Index &ur);
+
+    void addLink(int a, int b);
 };
 
 #endif //WEIGHTEDPLANARSTOCHASTICLATTICE_WPSL_NETWORK_H
