@@ -6,7 +6,7 @@
  * Zahidul Islam Jitu vai
  */
 #include "wpsl.h"
-#include "view.h"
+#include "../view.h"
 
 
 using namespace std;
