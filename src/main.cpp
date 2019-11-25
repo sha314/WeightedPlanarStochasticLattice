@@ -14,7 +14,10 @@ void test_wpsl_network(){
 
     wpslNetwork.viewIndex();
     wpslNetwork.viewLinks();
+    wpslNetwork.viewAdjacencyList();
+
     wpslNetwork.addNode();
+
 }
 
 void test_class(){
@@ -33,7 +36,7 @@ void test_class(){
 }
 
 int main(int argc, char* argv[]) {
-    std::cout << "Hello, World!" << std::endl;
+    std::cout << "Weighted Planner Stochastic Lattice (WPSL)" << std::endl;
 //    srand(time(NULL));
 
 //    main_jitu();

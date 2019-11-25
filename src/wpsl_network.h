@@ -14,6 +14,7 @@
 class WPSL_Network : public WPSL{
     std::vector<int> networkMapA;
     std::vector<int> networkMapB;
+    std::vector<std::vector<int>> _adjacency_list;
 
 public:
     ~WPSL_Network() override = default;
@@ -23,9 +24,10 @@ public:
     void addNode();
 
     void viewLinks();
+    void viewAdjacencyList();
     void init() override;
 
-    void first_4_node();
+    void seedNetwork();
     void addNeighbor(const Index &ll, const Index &ur);
 
     void addLink(int a, int b);
