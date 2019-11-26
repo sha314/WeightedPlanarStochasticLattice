@@ -32,13 +32,13 @@ void test_wpsl_network(){
 //    }
 
     wpslNetwork.addNode();
-//    wpslNetwork.viewIndex();
-//    wpslNetwork.viewLinks();
+    wpslNetwork.viewIndex();
+    wpslNetwork.viewLinks();
     wpslNetwork.viewAdjacencyList();
 
     wpslNetwork.addNode();
-//    wpslNetwork.viewIndex();
-//    wpslNetwork.viewLinks();
+    wpslNetwork.viewIndex();
+    wpslNetwork.viewLinks();
     wpslNetwork.viewAdjacencyList();
 }
 

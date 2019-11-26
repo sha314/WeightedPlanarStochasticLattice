@@ -25,8 +25,8 @@ void WPSL_Network::addNode() {
     size_t r = chooseIndexRandomly();
 //    size_t r = chooseIndexPreferentially();
 
-
-    int i = getNode(r);
+    auto q = int(r);
+    int i = getNode(q);
     cout << "**********chosen node is " << i << endl;
     Index ll = getLowerLeft(i);
     Index ur = getUpperRight(i);
@@ -82,6 +82,7 @@ void WPSL_Network::addNode() {
 
 void WPSL_Network::viewLinks() {
     cout << "WPSL_Network::viewLinks" << endl;
+    cerr << "Links are repeated : line " << __LINE__ << endl;
     for(size_t i{}; i < networkMapA.size(); ++i){
         cout << "[" << i << "]  " << networkMapA[i] << " <-> " << networkMapB[i] << endl;
     }
