@@ -7,7 +7,18 @@
 using namespace std;
 
 
+void test_link_set(){
+    set<Link> links;
+    for(int i{}; i < 6; ++i) {
+        for(int j{i+1}; j < 6; ++j) {
+            links.emplace(Link(i, j));
+        }
+    }
 
+    for(auto a: links){
+        cout << a << endl;
+    }
+}
 
 void test_wpsl_network(){
     WPSL_Network wpslNetwork;
@@ -66,7 +77,9 @@ int main(int argc, char* argv[]) {
 //    main_jitu_test();
 
 //    test_class();
-    test_wpsl_network();
+//    test_wpsl_network();
+
+    test_link_set();
 
 
     return 0;
