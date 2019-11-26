@@ -17,6 +17,7 @@ void test_wpsl_network(){
     wpslNetwork.viewAdjacencyList();
 
 //    wpslNetwork.is_neighbor(0, 1);
+    wpslNetwork.is_h_periodic(2, 1);
 
 //    for(int a{}; a < 4; ++a) {
 //        cout << a << " ";
@@ -35,6 +36,10 @@ void test_wpsl_network(){
 //    wpslNetwork.viewLinks();
     wpslNetwork.viewAdjacencyList();
 
+    wpslNetwork.addNode();
+//    wpslNetwork.viewIndex();
+//    wpslNetwork.viewLinks();
+    wpslNetwork.viewAdjacencyList();
 }
 
 void test_class(){

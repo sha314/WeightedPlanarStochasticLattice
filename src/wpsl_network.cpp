@@ -76,13 +76,6 @@ void WPSL_Network::addNode() {
                 addLink(a, b);
             }
         }
-//        for(auto b: new_nodes){
-//            cout << "b " << b << endl;
-//            if(is_neighbor(a, b)){
-//                cout << "neighbors" << endl;
-//                addLink(a, b);
-//            }
-//        }
     }
 
 }
@@ -157,7 +150,7 @@ void WPSL_Network::addLink(int a, int b) {
 void WPSL_Network::viewAdjacencyList() {
     cout << "WPSL_Network::viewAdjacencyList" << endl;
     for(size_t i{}; i < _adjacency_list.size(); ++i){
-        cout << i << " :{";
+        cout << i << "(size=" << _adjacency_list[i].size() << ") :{";
         for(auto a: _adjacency_list[i]){
             cout << a << ",";
         }
@@ -172,7 +165,7 @@ void WPSL_Network::viewAdjacencyList() {
  * @param node_b
  * @return
  */
-bool WPSL_Network::is_neighbor(int node_a, int node_b) {
+bool WPSL_Network::is_neighbor_non_periodic(int node_a, int node_b) {
     if(node_a == node_b){
         cout << "same node" << endl;
         return false;
@@ -208,48 +201,102 @@ bool WPSL_Network::is_neighbor(int node_a, int node_b) {
     return false;
 }
 
-///**
-// * Find if `node_a` and `node_b` are neighbor of each other using their coordinate and ranges
-// * periodic version
-// * @param node_a
-// * @param node_b
-// * @return
-// */
-//bool WPSL_Network::is_neighbor_periodic(int node_a, int node_b) {
-//    if(node_a == node_b){
-//        cout << "same node" << endl;
-//        return false;
-//    }
-//    auto lla = getLowerLeft(node_a);
-//    auto ura = getUpperRight(node_a);
-//
-//    auto llb = getLowerLeft(node_b);
-//    auto urb = getUpperRight(node_b);
-//    // horizontal neighbor check
-//    if(ura.getX() == llb.getX() || urb.getX() == lla.getX()) {
-//        cout << "Horizontal :";
-//        if (ura.getY() <= urb.getY() || ura.getY() >= llb.getY()) {
-//            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
-//            return true;
-//        } else if (urb.getY() <= ura.getY() || urb.getY() >= lla.getY()) {
-//            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
-//            return true;
-//        }
-//    }
-//    // vertical neighbor check
-//    if(ura.getY() == llb.getY() || urb.getY() == lla.getY()) {
-//        cout << "Vertical :";
-//        if (ura.getX() <= urb.getX() || ura.getX() >= llb.getX()) {
-//            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
-//            return true;
-//        } else if (urb.getX() <= ura.getX() || urb.getX() >= lla.getX()) {
-//            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
-//            return true;
-//        }
-//    }
-//
-//    return false;
-//}
+/**
+ * Find if `node_a` and `node_b` are neighbor of each other using their coordinate and ranges
+ * Non periodic version
+ * @param node_a
+ * @param node_b
+ * @return
+ */
+bool WPSL_Network::is_neighbor(int node_a, int node_b) {
+    if(node_a == node_b){
+        cout << "same node" << endl;
+        return false;
+    }
+    auto lla = getLowerLeft(node_a);
+    auto ura = getUpperRight(node_a);
+
+    auto llb = getLowerLeft(node_b);
+    auto urb = getUpperRight(node_b);
+    // horizontal neighbor check
+    if(ura.getX() == llb.getX() || urb.getX() == lla.getX() || is_h_periodic(node_a, node_b)) {
+        cout << "Horizontal :";
+        if (ura.getY() <= urb.getY() || ura.getY() >= llb.getY()) {
+            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
+            return true;
+        } else if (urb.getY() <= ura.getY() || urb.getY() >= lla.getY()) {
+            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
+            return true;
+        }
+    }
+    // vertical neighbor check
+    if(ura.getY() == llb.getY() || urb.getY() == lla.getY() || is_v_periodic(node_a, node_b)) {
+        cout << "Vertical :";
+        if (ura.getX() <= urb.getX() || ura.getX() >= llb.getX()) {
+            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
+            return true;
+        } else if (urb.getX() <= ura.getX() || urb.getX() >= lla.getX()) {
+            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Find if `node_a` and `node_b` are neighbor of each other using their coordinate and ranges
+ * periodic version
+ * only horizontal periodic case
+ * @param node_a
+ * @param node_b
+ * @return
+ */
+bool WPSL_Network::is_h_periodic(int node_a, int node_b) {
+    if(node_a == node_b){
+        cout << "same node" << endl;
+        return false;
+    }
+    auto lla = getLowerLeft(node_a);
+    auto ura = getUpperRight(node_a);
+
+    auto llb = getLowerLeft(node_b);
+    auto urb = getUpperRight(node_b);
+    // horizontal neighbor check
+    // one x coordinate is zero and other is 1 gives sum = 1
+    if((ura.getX()+llb.getX()) == 1 || (lla.getX() + urb.getX()) == 1){
+        cout << "horizontally periodic" << endl;
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Find if `node_a` and `node_b` are neighbor of each other using their coordinate and ranges
+ * periodic version
+ * only vertical periodic case
+ * @param node_a
+ * @param node_b
+ * @return
+ */
+bool WPSL_Network::is_v_periodic(int node_a, int node_b) {
+    if(node_a == node_b){
+        cout << "same node" << endl;
+        return false;
+    }
+    auto lla = getLowerLeft(node_a);
+    auto ura = getUpperRight(node_a);
+
+    auto llb = getLowerLeft(node_b);
+    auto urb = getUpperRight(node_b);
+    // one x coordinate is zero and other is 1 gives sum = 1
+    // vertical neighbor check
+    if((lla.getY() + urb.getY()) == 1 || (llb.getY() + ura.getY())==1){
+        cout << "vertically periodic" << endl;
+        return true;
+    }
+    return false;
+}
 
 /**
  * Clear node `label` from the adjacency list
