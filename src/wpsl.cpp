@@ -46,11 +46,12 @@ void WPSL::addPoint() {
  * @param ll
  * @param ur
  */
-void WPSL::addNeighbor(const Index &ll, const Index &ur) {
+size_t WPSL::addNeighbor(const Index &ll, const Index &ur) {
     index_lower_left.emplace_back(ll);
     index_upper_right.emplace_back(ur);
     _area.emplace_back(getArea(_node_label.size()));
     _node_label.emplace_back(_node_label.size());
+    return _node_label.size()-1;
 }
 
 double WPSL::getArea(size_t label) {

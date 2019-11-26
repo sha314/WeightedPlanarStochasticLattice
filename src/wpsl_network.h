@@ -28,7 +28,7 @@ public:
     void init() override;
 
     void seedNetwork();
-    void addNeighbor(const Index &ll, const Index &ur);
+    size_t addNeighbor(const Index &ll, const Index &ur) override;
 
     void addLink(int a, int b);
     bool is_neighbor(int node_a, int node_b);

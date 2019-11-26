@@ -15,7 +15,7 @@
 class WPSL{
     std::vector<Index> index_lower_left;
     std::vector<Index> index_upper_right;
-    std::vector<unsigned> _node_label;
+    std::vector<int> _node_label;
     std::vector<double > _area;
 //    const string symbol = " _< ^> ";
     const std::string symbol = " to ";
@@ -58,15 +58,15 @@ public:
     void totalArea();
 
 
-    virtual void addNeighbor(const Index &ll, const Index &ur);
+    virtual size_t addNeighbor(const Index &ll, const Index &ur);
 
     virtual void init();
 
-    unsigned getNode(unsigned i) const {return _node_label[i];}
-    Index getUpperRight(unsigned label) const {return index_upper_right[label];}
-    Index getLowerLeft(unsigned label) const {return index_lower_left[label];}
-    void setUpperRight(unsigned label, Index in) {index_upper_right[label] = in;}
-    void setLowerLeft(unsigned label, Index in)  {index_upper_right[label] = in;}
+    int getNode(int i) const {return _node_label[i];}
+    Index getUpperRight(int label) const {return index_upper_right[label];}
+    Index getLowerLeft(int label) const {return index_lower_left[label];}
+    void setUpperRight(int label, Index in) {index_upper_right[label] = in;}
+    void setLowerLeft(int label, Index in)  {index_upper_right[label] = in;}
 
     void addUpperRight(Index in) {index_upper_right.emplace_back(in);}
     void addLowerLeft(Index in)  {index_upper_right.emplace_back(in);}
@@ -78,7 +78,7 @@ public:
     void addArea(double A){_area.emplace_back(A);}
     Index randomIndex(const Index &ll, const Index &ur);
     size_t nodeCount() const {return _node_label.size();}
-    void addNodeLabel(){_node_label.emplace_back(_node_label.size());}
+    size_t addNodeLabel(){_node_label.emplace_back(_node_label.size()); return _node_label.size()-1;}
 };
 
 #endif //WEIGHTEDPLANARSTOCHASTICLATTICE_WPSL_H
