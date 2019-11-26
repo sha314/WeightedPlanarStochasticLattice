@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <iomanip>
 #include "wpsl_network.h"
 
 
@@ -22,12 +23,12 @@ void WPSL_Network::reset() {
 
 void WPSL_Network::addNode() {
 // randomly or preferentially select a box and divide it into four parts
-    size_t r = chooseIndexRandomly();
-//    size_t r = chooseIndexPreferentially();
+//    size_t r = chooseIndexRandomly();
+    size_t r = chooseIndexPreferentially();
 
     auto q = int(r);
     int i = getNode(q);
-    cout << "**********chosen node is " << i << endl;
+//    cout << "**********chosen node is " << i << endl;
     Index ll = getLowerLeft(i);
     Index ur = getUpperRight(i);
 
@@ -49,8 +50,8 @@ void WPSL_Network::addNode() {
     auto old_neighbors = _adjacency_list[i]; // old neighbors of the recycleable node
 
     clearNode(i);
-    cout << "after clearing" << endl;
-    viewAdjacencyList();
+//    cout << "after clearing" << endl;
+//    viewAdjacencyList();
 
     addLink(i, a_lr);
     addLink(i, a_ul);
@@ -58,8 +59,8 @@ void WPSL_Network::addNode() {
     addLink(a_lr, a_ur);
     addLink(a_ur, a_ul);
 
-    cout << "after adding brand new nodes " << endl;
-    viewAdjacencyList();
+//    cout << "after adding brand new nodes " << endl;
+//    viewAdjacencyList();
 
 
     vector<int> new_nodes;
@@ -68,11 +69,11 @@ void WPSL_Network::addNode() {
     new_nodes.emplace_back(a_ul);
     new_nodes.emplace_back(i);
     for(auto a: new_nodes){
-        cout << "a " << a << endl;
+//        cout << "a " << a << endl;
         for(auto b: old_neighbors){
-            cout << "b " << b << endl;
+//            cout << "b " << b << endl;
             if(is_neighbor(a, b)){
-                cout << "neighbors" << endl;
+//                cout << "neighbors" << endl;
                 addLink(a, b);
             }
         }
@@ -84,7 +85,7 @@ void WPSL_Network::viewLinks() {
     cout << "WPSL_Network::viewLinks" << endl;
     cerr << "Links are repeated : line " << __LINE__ << endl;
     for(size_t i{}; i < networkMapA.size(); ++i){
-        cout << "[" << i << "]  " << networkMapA[i] << " <-> " << networkMapB[i] << endl;
+        cout << "[" << setw(3) << i << "]  (" << networkMapA[i] << " <-> " << networkMapB[i] << ")" << endl;
     }
 }
 
@@ -102,7 +103,7 @@ void WPSL_Network::seedNetwork() {
 //    size_t r = chooseIndexPreferentially();
 //    int i = getNode(r);
     int i = 0; // initially it can only be zero
-    cout << "chosen node  " << i<< endl;
+//    cout << "chosen node  " << i<< endl;
     Index ll = getLowerLeft(i);
     Index ur = getUpperRight(i);
 
@@ -128,6 +129,11 @@ void WPSL_Network::seedNetwork() {
 
 }
 
+/**
+ * There is a chance that a link is repeated while stored
+ * @param a
+ * @param b
+ */
 void WPSL_Network::addLink(int a, int b) {
     if(a == b) return;
     if(a < b) {
@@ -178,23 +184,23 @@ bool WPSL_Network::is_neighbor_non_periodic(int node_a, int node_b) {
     auto urb = getUpperRight(node_b);
     // horizontal neighbor check
     if(ura.getX() == llb.getX() || urb.getX() == lla.getX()) {
-        cout << "Horizontal :";
+//        cout << "Horizontal :";
         if (ura.getY() <= urb.getY() || ura.getY() >= llb.getY()) {
-            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
+//            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
             return true;
         } else if (urb.getY() <= ura.getY() || urb.getY() >= lla.getY()) {
-            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
+//            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
             return true;
         }
     }
     // vertical neighbor check
     if(ura.getY() == llb.getY() || urb.getY() == lla.getY()) {
-        cout << "Vertical :";
+//        cout << "Vertical :";
         if (ura.getX() <= urb.getX() || ura.getX() >= llb.getX()) {
-            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
+//            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
             return true;
         } else if (urb.getX() <= ura.getX() || urb.getX() >= lla.getX()) {
-            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
+//            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
             return true;
         }
     }
@@ -221,23 +227,23 @@ bool WPSL_Network::is_neighbor(int node_a, int node_b) {
     auto urb = getUpperRight(node_b);
     // horizontal neighbor check
     if(ura.getX() == llb.getX() || urb.getX() == lla.getX() || is_h_periodic(node_a, node_b)) {
-        cout << "Horizontal :";
+//        cout << "Horizontal :";
         if (ura.getY() <= urb.getY() || ura.getY() >= llb.getY()) {
-            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
+//            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
             return true;
         } else if (urb.getY() <= ura.getY() || urb.getY() >= lla.getY()) {
-            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
+//            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
             return true;
         }
     }
     // vertical neighbor check
     if(ura.getY() == llb.getY() || urb.getY() == lla.getY() || is_v_periodic(node_a, node_b)) {
-        cout << "Vertical :";
+//        cout << "Vertical :";
         if (ura.getX() <= urb.getX() || ura.getX() >= llb.getX()) {
-            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
+//            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
             return true;
         } else if (urb.getX() <= ura.getX() || urb.getX() >= lla.getX()) {
-            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
+//            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
             return true;
         }
     }
@@ -266,7 +272,7 @@ bool WPSL_Network::is_h_periodic(int node_a, int node_b) {
     // horizontal neighbor check
     // one x coordinate is zero and other is 1 gives sum = 1
     if((ura.getX()+llb.getX()) == 1 || (lla.getX() + urb.getX()) == 1){
-        cout << "horizontally periodic" << endl;
+//        cout << "horizontally periodic" << endl;
         return true;
     }
     return false;
@@ -293,7 +299,7 @@ bool WPSL_Network::is_v_periodic(int node_a, int node_b) {
     // one x coordinate is zero and other is 1 gives sum = 1
     // vertical neighbor check
     if((lla.getY() + urb.getY()) == 1 || (llb.getY() + ura.getY())==1){
-        cout << "vertically periodic" << endl;
+//        cout << "vertically periodic" << endl;
         return true;
     }
     return false;

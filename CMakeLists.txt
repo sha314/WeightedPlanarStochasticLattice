@@ -7,6 +7,6 @@ set(SOURCE_FILES
         src/main.cpp
         src/jitu-vai/wpsl-jitu.cpp
         src/jitu-vai/wpsl-jitu.h
-        src/view.cpp src/view.h src/wpsl.cpp src/wpsl.h src/index.cpp src/index.h src/wpsl_network.cpp src/wpsl_network.h)
+        src/view.cpp src/view.h src/wpsl/wpsl.cpp src/wpsl/wpsl.h src/index/index.cpp src/index/index.h src/wpsl/wpsl_network.cpp src/wpsl/wpsl_network.h src/wpsl/wpsl_network_v2.cpp src/wpsl/wpsl_network_v2.h)
 
 add_executable(wpsl ${SOURCE_FILES})
