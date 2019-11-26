@@ -6,6 +6,7 @@
 #define WEIGHTEDPLANARSTOCHASTICLATTICE_WPSL_NETWORK_H
 
 
+#include <set>
 #include "wpsl.h"
 
 /**
@@ -14,7 +15,12 @@
 class WPSL_Network : public WPSL{
     std::vector<int> networkMapA;
     std::vector<int> networkMapB;
-    std::vector<std::vector<int>> _adjacency_list;
+
+    /**
+     * We need to be able to add and remove elements within the list.
+     * Using set makes it easier to find element by value, unlike vector, not by index
+     */
+    std::vector<std::set<int>> _adjacency_list;
 
 public:
     ~WPSL_Network() override = default;
@@ -22,16 +28,17 @@ public:
     void reset() override;
 
     void addNode();
+    void clearNode(int label);
 
     void viewLinks();
     void viewAdjacencyList();
     void init() override;
 
     void seedNetwork();
-    size_t addNeighbor(const Index &ll, const Index &ur) override;
 
     void addLink(int a, int b);
     bool is_neighbor(int node_a, int node_b);
+    bool is_neighbor_periodic(int node_a, int node_b);
 };
 
 #endif //WEIGHTEDPLANARSTOCHASTICLATTICE_WPSL_NETWORK_H

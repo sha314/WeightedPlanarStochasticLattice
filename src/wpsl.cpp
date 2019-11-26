@@ -46,7 +46,7 @@ void WPSL::addPoint() {
  * @param ll
  * @param ur
  */
-size_t WPSL::addNeighbor(const Index &ll, const Index &ur) {
+int WPSL::addNeighbor(const Index &ll, const Index &ur) {
     index_lower_left.emplace_back(ll);
     index_upper_right.emplace_back(ur);
     _area.emplace_back(getArea(_node_label.size()));
@@ -54,7 +54,7 @@ size_t WPSL::addNeighbor(const Index &ll, const Index &ur) {
     return _node_label.size()-1;
 }
 
-double WPSL::getArea(size_t label) {
+double WPSL::getArea(int label) {
     Index ll = index_lower_left[label];
     Index ur = index_upper_right[label];
     double a = ll.getX() - ur.getX();
@@ -123,7 +123,7 @@ void WPSL::add_point_v1() {
     size_t r = chooseIndexRandomly();
 //    size_t r = chooseIndexPreferentially();
 
-    size_t i = _node_label[r];
+    int i = _node_label[r];
     Index ll = index_lower_left[i];
     Index ur = index_upper_right[i];
 

@@ -12,11 +12,28 @@ using namespace std;
 void test_wpsl_network(){
     WPSL_Network wpslNetwork;
 
-    wpslNetwork.viewIndex();
-    wpslNetwork.viewLinks();
+//    wpslNetwork.viewIndex();
+//    wpslNetwork.viewLinks();
     wpslNetwork.viewAdjacencyList();
 
+//    wpslNetwork.is_neighbor(0, 1);
+
+//    for(int a{}; a < 4; ++a) {
+//        cout << a << " ";
+//        for(int b{}; b < 4; ++b) {
+//            cout << b << " ";
+//            if (wpslNetwork.is_neighbor(a, b)) {
+//                cout << " are neighbors" << endl;
+//            }else{
+//                cout << " are not" << endl;
+//            }
+//        }
+//    }
+
     wpslNetwork.addNode();
+//    wpslNetwork.viewIndex();
+//    wpslNetwork.viewLinks();
+    wpslNetwork.viewAdjacencyList();
 
 }
 

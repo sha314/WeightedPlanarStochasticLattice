@@ -58,7 +58,7 @@ public:
     void totalArea();
 
 
-    virtual size_t addNeighbor(const Index &ll, const Index &ur);
+    virtual int addNeighbor(const Index &ll, const Index &ur);
 
     virtual void init();
 
@@ -73,8 +73,8 @@ public:
 
     size_t chooseIndexRandomly();
     size_t chooseIndexPreferentially();
-    double getArea(size_t label);
-    void setArea(size_t label, double A)  {_area[label] = A;}
+    double getArea(int label);
+    void setArea(int label, double A)  {_area[label] = A;}
     void addArea(double A){_area.emplace_back(A);}
     Index randomIndex(const Index &ll, const Index &ur);
     size_t nodeCount() const {return _node_label.size();}

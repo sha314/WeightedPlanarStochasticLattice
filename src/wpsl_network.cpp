@@ -25,9 +25,9 @@ void WPSL_Network::addNode() {
     size_t r = chooseIndexRandomly();
 //    size_t r = chooseIndexPreferentially();
 
-    vector<unsigned> new_nodes;
-    unsigned i = getNode(r);
-    new_nodes.emplace_back(i);
+
+    int i = getNode(r);
+    cout << "**********chosen node is " << i << endl;
     Index ll = getLowerLeft(i);
     Index ur = getUpperRight(i);
 
@@ -38,33 +38,53 @@ void WPSL_Network::addNode() {
     setUpperRight(i, n);
     setArea(i, getArea(i));
 
+
     // lower right
-    auto tmp = addNeighbor(Index(n.getX(), ll.getY()), Index(ur.getX(), n.getY()));
-    new_nodes.emplace_back(tmp);
+    auto a_lr = addNeighbor(Index(n.getX(), ll.getY()), Index(ur.getX(), n.getY()));
     // upper right
-    tmp = addNeighbor(n, ur);
-    new_nodes.emplace_back(tmp);
+    auto a_ur = addNeighbor(n, ur);
     // upper left
-    tmp = addNeighbor(Index(ll.getX(), n.getY()), Index(n.getX(), ur.getY()));
-    new_nodes.emplace_back(tmp);
+    auto a_ul = addNeighbor(Index(ll.getX(), n.getY()), Index(n.getX(), ur.getY()));
 
     auto old_neighbors = _adjacency_list[i]; // old neighbors of the recycleable node
 
+    clearNode(i);
+    cout << "after clearing" << endl;
+    viewAdjacencyList();
+
+    addLink(i, a_lr);
+    addLink(i, a_ul);
+
+    addLink(a_lr, a_ur);
+    addLink(a_ur, a_ul);
+
+    cout << "after adding brand new nodes " << endl;
+    viewAdjacencyList();
+
+
+    vector<int> new_nodes;
+    new_nodes.emplace_back(a_lr);
+    new_nodes.emplace_back(a_ur);
+    new_nodes.emplace_back(a_ul);
+    new_nodes.emplace_back(i);
     for(auto a: new_nodes){
+        cout << "a " << a << endl;
         for(auto b: old_neighbors){
+            cout << "b " << b << endl;
             if(is_neighbor(a, b)){
                 cout << "neighbors" << endl;
+                addLink(a, b);
             }
         }
+//        for(auto b: new_nodes){
+//            cout << "b " << b << endl;
+//            if(is_neighbor(a, b)){
+//                cout << "neighbors" << endl;
+//                addLink(a, b);
+//            }
+//        }
     }
-//    // TODO
-//    // some links will be replaced and some new links will be created
-//
-//    addLink(1, 2);
-//    addLink(1, 4);
-//
-//    addLink(2, 3);
-//    addLink(3, 4);
+
 }
 
 void WPSL_Network::viewLinks() {
@@ -79,25 +99,16 @@ void WPSL_Network::init() {
     seedNetwork();
 }
 
-/**
- * Lower Left and Upper Right index is provided
- * @param ll
- * @param ur
- */
-size_t WPSL_Network::addNeighbor(const Index &ll, const Index &ur) {
-    addLowerLeft(ll);
-    addUpperRight(ur);
-    addArea(getArea(nodeCount()));
-    return addNodeLabel();
-}
+
 
 void WPSL_Network::seedNetwork() {
 
 // randomly or preferentially select a box and divide it into four parts
-    size_t r = chooseIndexRandomly();
+//    size_t r = chooseIndexRandomly();
 //    size_t r = chooseIndexPreferentially();
-
-    unsigned i = getNode(r);
+//    int i = getNode(r);
+    int i = 0; // initially it can only be zero
+    cout << "chosen node  " << i<< endl;
     Index ll = getLowerLeft(i);
     Index ur = getUpperRight(i);
 
@@ -109,17 +120,17 @@ void WPSL_Network::seedNetwork() {
     setArea(i, getArea(i));
 
     // lower right
-    addNeighbor(Index(n.getX(), ll.getY()), Index(ur.getX(), n.getY()));
+    auto a_lr = addNeighbor(Index(n.getX(), ll.getY()), Index(ur.getX(), n.getY()));
     // upper right
-    addNeighbor(n, ur);
+    auto a_ur = addNeighbor(n, ur);
     // upper left
-    addNeighbor(Index(ll.getX(), n.getY()), Index(n.getX(), ur.getY()));
+    auto a_ul = addNeighbor(Index(ll.getX(), n.getY()), Index(n.getX(), ur.getY()));
 
-    addLink(0, 1);
-    addLink(0, 3);
+    addLink(i, a_lr);
+    addLink(i, a_ul);
 
-    addLink(1, 2);
-    addLink(2, 3);
+    addLink(a_lr, a_ur);
+    addLink(a_ur, a_ul);
 
 }
 
@@ -139,16 +150,16 @@ void WPSL_Network::addLink(int a, int b) {
     if(b >= _adjacency_list.size()) {
         _adjacency_list.resize(b+1);
     }
-    _adjacency_list[a].emplace_back(b);
-    _adjacency_list[b].emplace_back(a);
+    _adjacency_list[a].emplace(b);
+    _adjacency_list[b].emplace(a);
 }
 
 void WPSL_Network::viewAdjacencyList() {
     cout << "WPSL_Network::viewAdjacencyList" << endl;
     for(size_t i{}; i < _adjacency_list.size(); ++i){
         cout << i << " :{";
-        for(size_t j{}; j < _adjacency_list[i].size(); ++j){
-            cout << _adjacency_list[i][j] << ",";
+        for(auto a: _adjacency_list[i]){
+            cout << a << ",";
         }
         cout << "}" << endl;
     }
@@ -156,11 +167,16 @@ void WPSL_Network::viewAdjacencyList() {
 
 /**
  * Find if `node_a` and `node_b` are neighbor of each other using their coordinate and ranges
+ * Non periodic version
  * @param node_a
  * @param node_b
  * @return
  */
 bool WPSL_Network::is_neighbor(int node_a, int node_b) {
+    if(node_a == node_b){
+        cout << "same node" << endl;
+        return false;
+    }
     auto lla = getLowerLeft(node_a);
     auto ura = getUpperRight(node_a);
 
@@ -168,26 +184,81 @@ bool WPSL_Network::is_neighbor(int node_a, int node_b) {
     auto urb = getUpperRight(node_b);
     // horizontal neighbor check
     if(ura.getX() == llb.getX() || urb.getX() == lla.getX()) {
-        cout << "Horizontal ";
-        if (ura.getY() < urb.getY() || ura.getY() > llb.getY()) {
+        cout << "Horizontal :";
+        if (ura.getY() <= urb.getY() || ura.getY() >= llb.getY()) {
             cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
             return true;
-        } else if (urb.getY() < ura.getY() || urb.getY() > lla.getY()) {
+        } else if (urb.getY() <= ura.getY() || urb.getY() >= lla.getY()) {
             cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
             return true;
         }
     }
     // vertical neighbor check
     if(ura.getY() == llb.getY() || urb.getY() == lla.getY()) {
-        cout << "Vertical ";
-        if (ura.getX() < urb.getX() || ura.getX() > llb.getX()) {
+        cout << "Vertical :";
+        if (ura.getX() <= urb.getX() || ura.getX() >= llb.getX()) {
             cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
             return true;
-        } else if (urb.getX() < ura.getX() || urb.getX() > lla.getX()) {
+        } else if (urb.getX() <= ura.getX() || urb.getX() >= lla.getX()) {
             cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
             return true;
         }
     }
 
     return false;
+}
+
+///**
+// * Find if `node_a` and `node_b` are neighbor of each other using their coordinate and ranges
+// * periodic version
+// * @param node_a
+// * @param node_b
+// * @return
+// */
+//bool WPSL_Network::is_neighbor_periodic(int node_a, int node_b) {
+//    if(node_a == node_b){
+//        cout << "same node" << endl;
+//        return false;
+//    }
+//    auto lla = getLowerLeft(node_a);
+//    auto ura = getUpperRight(node_a);
+//
+//    auto llb = getLowerLeft(node_b);
+//    auto urb = getUpperRight(node_b);
+//    // horizontal neighbor check
+//    if(ura.getX() == llb.getX() || urb.getX() == lla.getX()) {
+//        cout << "Horizontal :";
+//        if (ura.getY() <= urb.getY() || ura.getY() >= llb.getY()) {
+//            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
+//            return true;
+//        } else if (urb.getY() <= ura.getY() || urb.getY() >= lla.getY()) {
+//            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
+//            return true;
+//        }
+//    }
+//    // vertical neighbor check
+//    if(ura.getY() == llb.getY() || urb.getY() == lla.getY()) {
+//        cout << "Vertical :";
+//        if (ura.getX() <= urb.getX() || ura.getX() >= llb.getX()) {
+//            cout << "upper right of node " << node_a << " is within the range of node " << node_b << endl;
+//            return true;
+//        } else if (urb.getX() <= ura.getX() || urb.getX() >= lla.getX()) {
+//            cout << "upper right of node " << node_b << " is within the range of node " << node_a << endl;
+//            return true;
+//        }
+//    }
+//
+//    return false;
+//}
+
+/**
+ * Clear node `label` from the adjacency list
+ * @param label
+ */
+void WPSL_Network::clearNode(int label) {
+    auto neighbors = _adjacency_list[label];
+    for(auto a: neighbors){
+        _adjacency_list[a].erase(label);
+    }
+    _adjacency_list[label].clear();
 }
