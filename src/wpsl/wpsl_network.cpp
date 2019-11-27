@@ -316,3 +316,17 @@ void WPSL_Network::clearNode(int label) {
     }
     _adjacency_list[label].clear();
 }
+
+void WPSL_Network::linksFromAdjacencyList() {
+    std::set<Link> links;
+    for(size_t i{}; i < _adjacency_list.size(); ++i){
+        auto a = int(i);
+        for(auto b: _adjacency_list[i]){
+            links.emplace(Link(a, b));
+        }
+    }
+    int i=0;
+    for(auto a: links){
+        cout << "[" << setw(3) << i++ << "] " << a << endl;
+    }
+}

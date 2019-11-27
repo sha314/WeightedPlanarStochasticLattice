@@ -45,6 +45,8 @@ public:
     bool is_neighbor_non_periodic(int node_a, int node_b);
     bool is_h_periodic(int node_a, int node_b);
     bool is_v_periodic(int node_a, int node_b);
+
+    void linksFromAdjacencyList();
 };
 
 

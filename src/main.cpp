@@ -58,6 +58,7 @@ void test_wpsl_network(){
     wpslNetwork.viewIndex();
     wpslNetwork.viewLinks();
     wpslNetwork.viewAdjacencyList();
+    wpslNetwork.linksFromAdjacencyList();
 }
 
 void test_wpsl_network_v2(){
@@ -91,6 +92,7 @@ void test_wpsl_network_v2(){
     wpslNetwork.viewIndex();
     wpslNetwork.viewLinks();
     wpslNetwork.viewAdjacencyList();
+    wpslNetwork.linksFromAdjacencyList();
 }
 
 void test_class(){
@@ -118,7 +120,7 @@ int main(int argc, char* argv[]) {
 
 //    test_class();
     test_wpsl_network();
-    test_wpsl_network_v2();
+//    test_wpsl_network_v2();
 
 //    test_link_set();
 
