@@ -95,19 +95,31 @@ void test_wpsl_network_v2(){
     wpslNetwork.linksFromAdjacencyList();
 }
 
-void test_class(){
+void test_wpsl(){
     WPSL wpsl;
-    wpsl.viewIndex();
+//    wpsl.viewIndex();
+//
+//    wpsl.addPoint();
+//    wpsl.viewIndex();
+//    wpsl.totalArea();
+//
+//    wpsl.addPoint();
+//    wpsl.viewIndex();
+//    wpsl.totalArea();
 
-    wpsl.addPoint();
-    wpsl.viewIndex();
-    wpsl.totalArea();
-
-    wpsl.addPoint();
-    wpsl.viewIndex();
-    wpsl.totalArea();
-
-    wpsl.chooseIndexPreferentially();
+//    wpsl.chooseIndexPreferentially();
+    size_t limit = 1000;
+    for(size_t t{}; t < 1000; ++t){
+        wpsl.addPoint();
+    }
+    ofstream fout(wpsl.getClassName() + "_" + to_string(limit) + "_boxes.txt");
+    fout << "#<lower left points><upper right points>" << endl;
+    auto ll = wpsl.getLowerLeft();
+    auto ur = wpsl.getUpperRight();
+    for(size_t i{}; i <ll.size(); ++i){
+        fout << ll[i] << '\t' << ur[i] << endl;
+    }
+    fout.close();
 }
 
 int main(int argc, char* argv[]) {
@@ -118,8 +130,8 @@ int main(int argc, char* argv[]) {
 
 //    main_jitu_test();
 
-//    test_class();
-    test_wpsl_network();
+    test_wpsl();
+//    test_wpsl_network();
 //    test_wpsl_network_v2();
 
 //    test_link_set();

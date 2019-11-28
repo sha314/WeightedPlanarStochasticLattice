@@ -155,8 +155,8 @@ void WPSL::add_point_v1() {
 
 void WPSL::add_point_v2() {
 // randomly select a box and divide it into four parts
-    size_t r = chooseIndexRandomly();
-//    size_t r = chooseIndexPreferentially();
+//    size_t r = chooseIndexRandomly();
+    size_t r = chooseIndexPreferentially();
 
     size_t i = _node_label[r];
     Index ll = index_lower_left[i];

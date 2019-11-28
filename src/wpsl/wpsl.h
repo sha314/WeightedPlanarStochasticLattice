@@ -79,6 +79,9 @@ public:
     Index randomIndex(const Index &ll, const Index &ur);
     size_t nodeCount() const {return _node_label.size();}
     size_t addNodeLabel(){_node_label.emplace_back(_node_label.size()); return _node_label.size()-1;}
+    std::string getClassName() const { return  "WPSL";}
+    std::vector<Index> getUpperRight() const {return index_upper_right;}
+    std::vector<Index> getLowerLeft() const {return index_lower_left;}
 };
 
 #endif //WEIGHTEDPLANARSTOCHASTICLATTICE_WPSL_H
